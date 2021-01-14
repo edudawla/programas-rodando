@@ -1,25 +1,29 @@
 from flask import Flask
 import requests
+import json
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello():
-    valor = str(784978209)
-    cad ={}
+@app.route('/<name>')
+def hello(name):
+    valor = str(name)
+    cad = {}
+    cont = 0
     r = requests.get('https://api.github.com/repositories/19438/issues?fbclid=IwAR2ASDxPFSRBbXC3WTlV-CtEN5I5U1Ot3FMV6GNid6N43a4ftQ7kl2yOKi8')
     response = r.json()
-
     for i in range(len(response)):
         if valor == str(response[i]['id']):
             cad['id1'] = response[i]['id']
             cad['id2'] = response[i]['user']['id']
             cad['login'] = response[i]['user']['login']
             cad['url'] = response[i]['user']['url']
-    if cad == "":
+            cont+=1
+    if cont == '':
         return 'nada encontrado'
     else:
-        return cad
+        return json.dumps(cad)
+        #return cad
 
 if __name__ == '__main__':
     app.run()
+
