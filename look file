@@ -1,0 +1,25 @@
+#procura na pasta Downlaods o ultimo arquivo.
+#somente usando o lib Path
+
+
+from pathlib import Path
+arquivos = list()
+lastfile = str()
+
+
+def acesar_download():
+    arquivos.clear()
+    for i in Path(Path.home(), 'Downloads',).glob('*.CSV'):
+        arquivos.append(str(i).replace('/home/luis/Downloads/', ''))
+        arquivos.sort()
+    if len(arquivos) == 0:
+        lastfile = "nao tem nada"
+    elif len(arquivos) == 1:
+        lastfile = str(arquivos[0])
+    else:
+        lastfile = str(arquivos[-2])
+    return lastfile
+print(acesar_download())
+
+
+
