@@ -1,0 +1,22 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+
+# Coletar e analisar a primeira página
+page = requests.get('https://web.archive.org/web/20121007172955/http://www.nga.gov/collection/anZ1.htm')
+soup = BeautifulSoup(page.text, 'html.parser')
+
+# Pegar todo o texto da div BodyText
+artist_name_list = soup.find(class_='BodyText')
+#Pegar o texto de todas as instâncias da tag <a> dentro da div BodyText
+artist_name_list_items = artist_name_list.find_all('a')
+#print(artist_name_list_items)
+
+file = csv.writer(open('z-artist_data.CSV', 'w'))
+file.writerow(['Nome', 'Link'])
+
+for elemento in range(0,len(artist_name_list_items)-1):
+    nome = artist_name_list_items[elemento].text
+    link = artist_name_list_items[elemento].get('href').replace('/web/20121007172955/', '')
+    file.writerow([nome, link])
