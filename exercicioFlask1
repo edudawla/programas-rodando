@@ -4,6 +4,10 @@ import json
 
 app = Flask(__name__)
 
+@app.errorhandler(404)
+def invalid_route(e):
+    return json.dumps({'errorcode': 404, 'messege': 'route not found'})
+
 @app.route('/<name>')
 def hello(name):
     valor = str(name)
@@ -18,12 +22,11 @@ def hello(name):
             cad['login'] = response[i]['user']['login']
             cad['url'] = response[i]['user']['url']
             cont+=1
-    if cont == '':
-        return 'nada encontrado'
+    if cont == 0:
+        return invalid_route()
     else:
         return json.dumps(cad)
         #return cad
 
 if __name__ == '__main__':
     app.run()
-
